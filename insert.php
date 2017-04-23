@@ -1,25 +1,36 @@
 <?php
- // just so we know it is broken
- error_reporting(E_ALL ^ E_DEPRECATED);
- // some basic sanity checks
- 
- if(ISSET($_GET["btn"]))
- {
- 	$usn=$_GET["USN"];
- 	$name=$_GET["Name"];
-     //connect to the db
-    $con=mysql_connect('us-cdbr-iron-east-03.cleardb.net','bb8ff899f74f6a','ff6ca091')  or die ("Con Error".mysql_error());
-    mysql_select_db('ad_254e48c6f6af81f',$con);
-     $sql = "insert into studentinfo2(USN,Name) values('$usn','$name')";
-     echo $sql;
-     // the result of the query
-     $result = mysql_query($sql,$con) or die("Invalid query: " . mysql_error());
-   
-     if($result)
-     echo "Saved";
-     echo "<a href=\"/index.php\">Home Page</a></br>";
-     else
-	 echo "Error".mysql_error();
-     mysql_close($con);
- }
-?>
+
+$usn=$_REQUEST['USN'];
+$name=$_REQUEST['Name'];
+
+
+
+//connect to mysql
+$server="us-cdbr-iron-east-03.cleardb.net";
+$username="bb8ff899f74f6a";
+$password="ff6ca091";
+
+$connection=mysql_connect($server,$username,$password);
+
+if(!$connection)
+{
+    echo "connection failed";
+}
+else
+{
+    mysql_select_db("ad_254e48c6f6af81f");
+    
+    $query="insert into studentinfo2 values($usn,$name)";
+    
+    $result=mysql_query($query,$connection);
+    
+    if(!$result)
+    {
+        echo "insertion failed";
+    }
+    else
+    {
+        echo "inserted successfully";
+    }
+    mysql_close($connection);
+}
